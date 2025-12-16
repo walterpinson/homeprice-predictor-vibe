@@ -156,4 +156,4 @@ python3 deploy_model_endpoint.py \
   --model-version "$MODEL_VERSION" \
   --endpoint-name "$ENDPOINT_NAME" \
   --deployment-name "$DEPLOYMENT_NAME" \
-  "${EXTRA_ARGS[@]}"
+  "${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}"
