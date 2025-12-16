@@ -1,7 +1,7 @@
 ---
 name: infra-verify-script-skeleton
 description: Create a Bash script that verifies the Azure ML infra using az and az ml
-agent: ask
+agent: agent
 argument-hint: Optionally specify workspace and compute naming conventions
 ---
 

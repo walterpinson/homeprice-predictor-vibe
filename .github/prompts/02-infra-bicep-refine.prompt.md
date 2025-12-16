@@ -1,7 +1,7 @@
 ---
 name: infra-bicep-refine
 description: Refine and harden the Azure ML workspace Bicep template
-agent: ask
+agent: agent
 argument-hint: Optionally mention subscription/region or extra constraints
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: infra-deploy-sh-skeleton
 description: Scaffold a Bash script to deploy the Bicep template with az CLI
-agent: ask
+agent: agent
 argument-hint: Optionally specify default values for RG, location, base name
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: infra-bicep-skeleton
 description: Scaffold a minimal Azure ML workspace Bicep template
-agent: ask
+agent: agent
 argument-hint: Optionally describe any extra constraints for the infra
 ---
 

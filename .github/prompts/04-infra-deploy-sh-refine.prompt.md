@@ -1,7 +1,7 @@
 ---
 name: infra-deploy-sh-refine
 description: Harden deploy.sh and print deployment outputs
-agent: ask
+agent: agent
 argument-hint: Optionally specify which outputs matter most to you
 ---
 
