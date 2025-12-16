@@ -28,3 +28,10 @@ Prompt file: `.github/prompts/03-infra-deploy-sh-skeleton.prompt.md`
 Use this to harden `deploy.sh` and print deployment outputs.
 
 Prompt file: `.github/prompts/04-infra-deploy-sh-refine.prompt.md`
+
+## 05 – Infra Verify Script Skeleton
+
+Use this after deployment to generate `src/infrastructure/verify.sh`,
+which checks that the workspace and compute cluster exist and are ready.
+
+Prompt file: `.github/prompts/05-infra-verify-script-skeleton.prompt.md`
