@@ -1,0 +1,11 @@
+vars {
+  baseUrl: {{BASE_URL_HERE}}
+  apiKey: {{API_KEY_HERE}}
+}
+
+# Instructions:
+# 1. Copy this file to 'demo.bru' in the same directory
+# 2. Replace {{BASE_URL_HERE}} with your Azure ML endpoint scoring URI
+#    Example: https://your-endpoint.eastus.inference.ml.azure.com/score
+# 3. Replace {{API_KEY_HERE}} with your endpoint's primary or secondary key
+#    Get the key from Azure ML Studio or using: az ml online-endpoint get-credentials

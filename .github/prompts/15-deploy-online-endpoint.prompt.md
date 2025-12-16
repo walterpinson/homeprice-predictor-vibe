@@ -11,6 +11,8 @@ a managed online endpoint in Azure ML.
 Task:
 
 - Create or fully overwrite `src/ml-pipeline/deploy_model.py`.
+- Create or fully overwrite `src/ml-pipeline/deploy_model.sh` (a bash
+  wrapper script).
 
 Assumptions:
 
@@ -34,13 +36,14 @@ Requirements for `deploy_model.py`:
      - `--endpoint-name`
      - `--deployment-name`
      - `--model-name`
-     - Optional: `--instance-type` (e.g., `Standard_DS3_v2`)
+     - `--model-version` (default: latest version if omitted)
+     - Optional: `--instance-type` (e.g., `Standard_DS3_v2`, default: `Standard_DS2_v2`)
      - Optional: `--instance-count` (default 1)
 
 3. Behavior:
    - Connect to the workspace via `MLClient`.
-   - Retrieve the registered model by name (latest version by default,
-     unless you choose to add explicit version support).
+   - Retrieve the registered model by name and version (use latest version
+     if `--model-version` is not provided).
    - Define or update:
      - A `ManagedOnlineEndpoint` with the given `endpoint-name`.
      - A `ManagedOnlineDeployment` with:
@@ -66,8 +69,37 @@ Constraints:
 - Keep the script focused on a single responsibility: deploying the
   model to an online endpoint.
 
+Requirements for `deploy_model.sh`:
+
+1. Purpose:
+   - Provide a convenient wrapper around `deploy_model.py`.
+   - Read Azure configuration from the infrastructure deployment outputs.
+
+2. Behavior:
+   - Source or read the deployment outputs from
+     `src/infrastructure/outputs.json` (created by `deploy.sh`).
+   - Extract:
+     - Subscription ID
+     - Resource group name
+     - Workspace name
+   - Require the following as command-line arguments:
+     - `--model-name` (required)
+     - `--model-version` (required)
+     - `--endpoint-name` (required)
+     - `--deployment-name` (optional, defaults to "blue")
+   - Invoke `deploy_model.py` with these values.
+   - Pass through any additional arguments for instance type/count.
+
+3. UX:
+   - Print a header indicating endpoint deployment is starting.
+   - Display configuration details (subscription, workspace, model, endpoint).
+   - Show the scoring URI after successful deployment.
+   - Make the script executable and include a shebang.
+
 Important:
 
 - Do NOT print the file contents in chat.
 - Write the complete script directly to
   `src/ml-pipeline/deploy_model.py`, overwriting any existing content.
+- Write the complete script directly to
+  `src/ml-pipeline/deploy_model.sh`, overwriting any existing content.
