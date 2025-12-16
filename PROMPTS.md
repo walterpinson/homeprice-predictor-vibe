@@ -73,3 +73,36 @@ that reference the raw CSV files.
 Prompt file: `.github/prompts/08-mltable-definitions.prompt.md`
 
 Command: `#mltable-definitions`
+
+---
+
+## Segment 3: Training and Registration Prompts
+
+### 09 – Register MLTable Data Assets
+
+Use this to create `src/ml-pipeline/register_data.py`, which registers
+the train/val/test MLTable assets in the Azure ML workspace.
+
+Prompt file: `.github/prompts/09-register-mltables.prompt.md`
+
+Command: `#register-mltables`
+
+### 10 – Train Script (scikit-learn)
+
+Use this to create `src/ml-pipeline/train.py`, a scikit-learn training
+script that reads MLTable-based data, trains a regression model, and
+writes `./outputs/model.pkl`.
+
+Prompt file: `.github/prompts/10-train-script-scikit.prompt.md`
+
+Command: `#train-script-scikit`
+
+### 11 – Register Model Script
+
+Use this to create `src/ml-pipeline/register_model.py`, which registers the
+trained model from a completed Azure ML job into the workspace's model
+registry.
+
+Prompt file: `.github/prompts/11-register-model-script.prompt.md`
+
+Command: `#register-model-script`
