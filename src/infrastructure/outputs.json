@@ -1,0 +1,11 @@
+{
+  "subscriptionId": "977cc467-d118-4a53-925c-04b063c711ed",
+  "resourceGroup": "rg-ml-vibe-demo-01",
+  "location": "eastus",
+  "workspaceName": "vibedemo-01-mlw",
+  "storageAccountName": "vibedemo01st",
+  "keyVaultName": "vibedemo-01-kv",
+  "containerRegistryName": "vibedemo01acr",
+  "appInsightsName": "vibedemo-01-ai",
+  "computeCluster": "cpu-cluster"
+}

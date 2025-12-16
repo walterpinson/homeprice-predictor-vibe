@@ -11,6 +11,8 @@ assets (train/val/test) into the Azure ML workspace.
 Task:
 
 - Create or fully overwrite `src/ml-pipeline/register_data.py`.
+- Create or fully overwrite `src/ml-pipeline/register_data.sh` (a bash
+  wrapper script).
 
 Assumptions:
 
@@ -62,8 +64,32 @@ Constraints:
 - Keep the script focused on data registration; it should not run any
   training.
 
+Requirements for `register_data.sh`:
+
+1. Purpose:
+   - Provide a convenient wrapper around `register_data.py`.
+   - Read Azure configuration from the infrastructure deployment outputs.
+
+2. Behavior:
+   - Source or read the deployment outputs from
+     `src/infrastructure/outputs.json` (created by `deploy.sh`).
+   - Extract:
+     - Subscription ID
+     - Resource group name
+     - Workspace name
+   - Invoke `register_data.py` with these values.
+   - Allow optional arguments to override defaults (e.g.,
+     `--base-data-name`).
+
+3. UX:
+   - Print a header indicating data registration is starting.
+   - Pass through any additional arguments to `register_data.py`.
+   - Make the script executable and include a shebang.
+
 Important:
 
 - Do NOT print the file content in chat.
 - Write the complete script directly to `src/ml-pipeline/register_data.py`,
+  overwriting any existing content.
+- Write the complete script directly to `src/ml-pipeline/register_data.sh`,
   overwriting any existing content.

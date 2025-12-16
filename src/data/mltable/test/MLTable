@@ -1,5 +1,5 @@
 paths:
-  - file: ../../raw/test.csv
+  - file: ./test.csv
 transformations:
   - read_delimited:
       delimiter: ','

@@ -1,5 +1,30 @@
 # House Price Prediction Scenario
 
+## Data Preparation Workflow
+
+### 1. Generate Synthetic Data
+```bash
+cd src/data
+./generate_data.sh
+```
+This creates 500 rows of synthetic house price data split into `raw/train.csv`, `raw/val.csv`, and `raw/test.csv`.
+
+### 2. Prepare MLTable Directories
+```bash
+cd src/data
+./prepare_mltables.sh
+```
+This copies CSV files into their corresponding `mltable/{split}/` directories, making them self-contained for Azure ML upload. Each MLTable directory will contain both the `MLTable` definition file and the corresponding CSV file.
+
+### 3. Register Data Assets in Azure ML
+```bash
+cd ../../ml-pipeline
+./register_data.sh
+```
+This uploads the MLTable directories to Azure ML and registers them as data assets.
+
+---
+
 ## Business Context
 
 Mountain View Property Analytics is a boutique real-estate investment firm operating in the Boulder, Colorado metropolitan area. The firm specializes in acquiring undervalued residential properties, making strategic improvements, and selling them at competitive market prices. With a portfolio of 30-50 active properties at any given time and annual transaction volumes exceeding $15 million, accurate price predictions are critical to their business model.
@@ -15,3 +40,4 @@ Mountain View has compiled historical transaction data covering approximately 50
 ## Business Impact
 
 A reliable machine learning model would enable Mountain View to make faster acquisition decisions, optimize their renovation budgets by identifying which improvements deliver the highest ROI, and reduce reliance on expensive third-party appraisals for preliminary valuations. The firm estimates that improving prediction accuracy by just 3% would save approximately $200,000 annually through better purchase decisions and reduced holding costs. Additionally, having instant valuations would allow them to respond to new listings within hours rather than days, providing a significant competitive advantage in Boulder's fast-moving market.
+

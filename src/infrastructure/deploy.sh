@@ -135,6 +135,20 @@ KEYVAULT_NAME=$(echo "$OUTPUTS" | jq -r '.keyVaultName.value')
 ACR_NAME=$(echo "$OUTPUTS" | jq -r '.containerRegistryName.value')
 APPINSIGHTS_NAME=$(echo "$OUTPUTS" | jq -r '.appInsightsName.value')
 
+echo "[deploy] Saving deployment outputs to outputs.json..."
+cat > "$(dirname "$0")/outputs.json" <<EOF
+{
+  "subscriptionId": "$SUBSCRIPTION_ID",
+  "resourceGroup": "$RESOURCE_GROUP",
+  "location": "$LOCATION",
+  "workspaceName": "$WORKSPACE_NAME",
+  "storageAccountName": "$STORAGE_NAME",
+  "keyVaultName": "$KEYVAULT_NAME",
+  "containerRegistryName": "$ACR_NAME",
+  "appInsightsName": "$APPINSIGHTS_NAME"
+}
+EOF
+
 echo ""
 echo "========================================="
 echo "Deployment Summary"
@@ -147,3 +161,4 @@ echo "App Insights:       $APPINSIGHTS_NAME"
 echo "========================================="
 echo ""
 echo "[deploy] Deployment complete!"
+echo "[deploy] Configuration saved to outputs.json"

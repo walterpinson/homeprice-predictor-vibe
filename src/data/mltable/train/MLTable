@@ -1,5 +1,5 @@
 paths:
-  - file: ../../raw/train.csv
+  - file: ./train.csv
 transformations:
   - read_delimited:
       delimiter: ','

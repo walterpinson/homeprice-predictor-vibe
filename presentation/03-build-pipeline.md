@@ -23,6 +23,47 @@
 
 ---
 
+# Setting Up Your Local Environment
+
+Before running the ML pipeline scripts, create the Conda environment:
+
+```bash
+conda env create -f src/deploy/env-train.yml
+conda activate vibe-ml-train
+```
+
+This environment includes:
+- Azure ML Python SDK v2 (azure-ai-ml, azure-identity)
+- scikit-learn, pandas, numpy
+- mltable (for loading data assets)
+- mlflow (for logging)
+
+> The same environment works locally **and** in Azure ML training jobs.
+
+---
+
+# Registering Data Assets
+
+Before we can train, we need to register our MLTable definitions as data
+assets in Azure ML:
+
+```bash
+cd src/ml-pipeline
+./register_data.sh
+```
+
+This script:
+- Reads infrastructure outputs (subscription, workspace, etc.)
+- Registers three MLTable assets:
+  - `house-prices-train`
+  - `house-prices-val`
+  - `house-prices-test`
+- Makes them available for training jobs to reference
+
+> Data registration separates data management from training code.
+
+---
+
 # Training Script Responsibilities
 
 - Read MLTable data assets (train and val).
@@ -30,6 +71,13 @@
 - Train the model.
 - Evaluate on validation data (basic metrics).
 - Save the trained model to `./outputs` so Azure ML captures it.
+
+Submit the training job:
+
+```bash
+cd src/ml-pipeline
+./submit_training_job.sh
+```
 
 > `./outputs` is the contract between your script and Azure ML jobs.
 
@@ -45,6 +93,18 @@
     - Scenario name.
     - Data version.
     - Training code version (git commit hash, optional).
+
+Register the model:
+
+```bash
+cd src/ml-pipeline
+python register_model.py \
+  --subscription-id <SUB_ID> \
+  --resource-group <RG> \
+  --workspace-name <WORKSPACE> \
+  --job-name <JOB_NAME> \
+  --model-name house-price-regressor
+```
 
 > Registration turns "a file in a run" into a reusable asset.
 

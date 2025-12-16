@@ -6,6 +6,19 @@ etc.
 
 ---
 
+## Segment 0: Environment Setup
+
+### 00 – Conda Environment for Training
+
+Use this to create `src/deploy/env-train.yml`, a Conda environment
+suitable for both local development and Azure ML training jobs.
+
+Prompt file: `.github/prompts/00-conda-env-train.prompt.md`
+
+Command: `#conda-env-train`
+
+---
+
 ## Segment 1: Infrastructure Prompts
 
 ### 01 – Infra Bicep Skeleton
@@ -80,8 +93,9 @@ Command: `#mltable-definitions`
 
 ### 09 – Register MLTable Data Assets
 
-Use this to create `src/ml-pipeline/register_data.py`, which registers
-the train/val/test MLTable assets in the Azure ML workspace.
+Use this to create `src/ml-pipeline/register_data.py` and
+`src/ml-pipeline/register_data.sh`, which register the train/val/test
+MLTable assets in the Azure ML workspace.
 
 Prompt file: `.github/prompts/09-register-mltables.prompt.md`
 
@@ -97,12 +111,22 @@ Prompt file: `.github/prompts/10-train-script-scikit.prompt.md`
 
 Command: `#train-script-scikit`
 
-### 11 – Register Model Script
+### 11 – Submit Training Job
+
+Use this to create `src/ml-pipeline/submit_training_job.py` and
+`src/ml-pipeline/submit_training_job.sh`, which submit a training job
+to Azure ML using the registered data assets and compute cluster.
+
+Prompt file: `.github/prompts/11-submit-training-job.prompt.md`
+
+Command: `#submit-training-job`
+
+### 12 – Register Model Script
 
 Use this to create `src/ml-pipeline/register_model.py`, which registers the
 trained model from a completed Azure ML job into the workspace's model
 registry.
 
-Prompt file: `.github/prompts/11-register-model-script.prompt.md`
+Prompt file: `.github/prompts/12-register-model-script.prompt.md`
 
 Command: `#register-model-script`
