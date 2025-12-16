@@ -43,6 +43,27 @@
   - Azure CLI (`az`) + Bash (`deploy.sh`)
   - GitHub Copilot for scaffolding and refinement
 
+## Deploy Command
+
+```bash
+cd src/infrastructure
+./deploy.sh \
+  --subscription-id "YOUR_SUBSCRIPTION_ID" \
+  --resource-group "rg-ml-demo" \
+  --location "eastus" \
+  --base-name "mldemo"
+```
+
+## Verify Command
+
+```bash
+./verify.sh \
+  --subscription-id "YOUR_SUBSCRIPTION_ID" \
+  --resource-group "rg-ml-demo" \
+  --workspace-name "mldemo-mlw" \
+  --compute-name "cpu-cluster"
+```
+
 ---
 
 # How We’ll Use GenAI Here
