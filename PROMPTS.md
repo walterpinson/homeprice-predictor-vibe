@@ -130,3 +130,56 @@ registry.
 Prompt file: `.github/prompts/12-register-model-script.prompt.md`
 
 Command: `#register-model-script`
+
+---
+
+## Segment 4: Deployment & Inference Prompts
+
+### 13 – Conda Environment for Inference
+
+Use this to create `src/deploy/env-infer.yml`, a lean Conda environment
+for the managed online endpoint with minimal dependencies for fast
+cold start.
+
+Prompt file: `.github/prompts/13-conda-env-infer.prompt.md`
+
+Command: `#conda-env-infer`
+
+### 14 – Score Script
+
+Use this to create `src/deploy/score.py`, the scoring entry script used
+by the managed online deployment. Implements `init()` and `run(data)`
+functions for model loading and inference.
+
+Prompt file: `.github/prompts/14-score-script.prompt.md`
+
+Command: `#score-script`
+
+### 15 – Deploy Online Endpoint
+
+Use this to create `src/ml-pipeline/deploy_model.py`, which deploys the
+registered model to a managed online endpoint using Azure ML SDK v2.
+
+Prompt file: `.github/prompts/15-deploy-online-endpoint.prompt.md`
+
+Command: `#deploy-online-endpoint`
+
+### 16 – Bruno Collection Setup
+
+Use this to create the Bruno collection metadata and sample environment
+file: `bruno/house-price-api/bruno.json` and
+`bruno/house-price-api/environments/demo.bru.sample`.
+
+Prompt file: `.github/prompts/16-bruno-collection.prompt.md`
+
+Command: `#bruno-collection-setup`
+
+### 17 – Bruno Requests
+
+Use this to create Bruno request files for calling the house price
+endpoint: `predict-basic.bru`, `predict-large-house.bru`,
+`predict-fixer-upper.bru`.
+
+Prompt file: `.github/prompts/17-bruno-requests.prompt.md`
+
+Command: `#bruno-requests`
