@@ -39,6 +39,9 @@ Goals:
 Instructions:
 
 - Read the existing `src/infrastructure/deploy.sh` in this workspace.
-- Return an improved version that incorporates these enhancements.
+- Produce an improved version that incorporates these enhancements.
 - Preserve the existing flag structure and overall purpose.
-- Return only the updated Bash script code.
+- Write the updated script directly to `src/infrastructure/deploy.sh`.
+- Ensure the file remains executable.
+- Do NOT return the code in the chat window.
+- Confirm the file was updated successfully.

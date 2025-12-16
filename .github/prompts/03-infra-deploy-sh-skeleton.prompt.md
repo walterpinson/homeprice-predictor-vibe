@@ -44,6 +44,7 @@ Requirements:
 
 Deliverable:
 
-- Generate the complete content for `src/infrastructure/deploy.sh`,
-  ready to be saved and marked executable.
-- Return only the Bash script code.
+- Write the complete script directly to `src/infrastructure/deploy.sh`.
+- Make the file executable with `chmod +x src/infrastructure/deploy.sh`.
+- Do NOT return the code in the chat window.
+- Confirm the file was created successfully.

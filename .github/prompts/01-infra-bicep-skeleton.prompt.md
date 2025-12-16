@@ -63,4 +63,9 @@ Style:
 - Add concise comments above major sections to make this template easy
   to explain in a live tech talk.
 - Avoid advanced features like VNets or private endpoints.
-- Return only the Bicep code to paste into `src/infrastructure/main.bicep`.
+
+Deliverable:
+
+- Write the complete Bicep template directly to `src/infrastructure/main.bicep`.
+- Do NOT return the code in the chat window.
+- Confirm the file was created successfully.

@@ -51,9 +51,10 @@ Requirements:
 
 Deliverable:
 
-- Generate the complete content for `src/infrastructure/verify.sh`,
-  ready to be saved and marked executable.
-- Return only the Bash script code.
+- Write the complete script directly to `src/infrastructure/verify.sh`.
+- Make the file executable with `chmod +x src/infrastructure/verify.sh`.
+- Do NOT return the code in the chat window.
+- Confirm the file was created successfully.
 
-NOTE: Do NOT run any commands yourself; just generate the script.
-I will execute it manually from the terminal.
+NOTE: Do NOT run any verification commands yourself; just create the script.
+The user will execute it manually from the terminal.

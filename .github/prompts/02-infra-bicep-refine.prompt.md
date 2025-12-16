@@ -54,4 +54,6 @@ Instructions:
 - Produce an updated version that is ready to deploy with a single
   `az deployment group create` command into an empty resource group.
 - Add short comments before major sections to aid live explanation.
-- Return only the improved Bicep code to replace the file.
+- Write the improved Bicep code directly to `src/infrastructure/main.bicep`.
+- Do NOT return the code in the chat window.
+- Confirm the file was updated successfully.
