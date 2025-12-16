@@ -50,6 +50,15 @@
     - Instance type and count.
 - Point 100% of traffic to the new deployment.
 
+```bash
+cd src/ml-pipeline
+
+./deploy_model_endpoint.sh \
+  --model-name house-pricing-01 \
+  --model-version 1 \
+  --endpoint-name house-price-ep
+```
+
 > A few lines of SDK code wire model, code, and environment together.
 
 ---

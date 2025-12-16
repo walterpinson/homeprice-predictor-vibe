@@ -157,7 +157,7 @@ Command: `#score-script`
 
 ### 15 – Deploy Online Endpoint
 
-Use this to create `src/ml-pipeline/deploy_model.py`, which deploys the
+Use this to create `src/ml-pipeline/deploy_model_endpoint.py`, which deploys the
 registered model to a managed online endpoint using Azure ML SDK v2.
 
 Prompt file: `.github/prompts/15-deploy-online-endpoint.prompt.md`

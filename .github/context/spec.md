@@ -56,7 +56,7 @@ same resource topology but live in separate resource groups.
 - `src/ml-pipeline/`
   - `train.py`: trains a regression model on house-price data.
   - `register.py`: registers the trained model in the workspace.
-  - `deploy_model.py`: creates/updates a managed online endpoint using
+  - `deploy_model_endpoint.py`: creates/updates a managed online endpoint using
     the registered model, `src/deploy/score.py`, and `env-infer.yml`.
 
 - `src/data/`

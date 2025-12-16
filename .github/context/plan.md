@@ -32,7 +32,7 @@
 1. Implement `src/deploy/score.py`:
    - `init()` loads the registered model.
    - `run(inputs)` accepts JSON and returns predictions.
-2. Implement `deploy_model.py`:
+2. Implement `deploy_model_endpoint.py`:
    - Create managed online endpoint (idempotent).
    - Create/update deployment using model + `score.py` + `env-infer.yml`.
 3. Create a Bruno collection under `bruno/`:

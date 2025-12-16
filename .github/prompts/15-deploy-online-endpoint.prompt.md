@@ -10,8 +10,8 @@ a managed online endpoint in Azure ML.
 
 Task:
 
-- Create or fully overwrite `src/ml-pipeline/deploy_model.py`.
-- Create or fully overwrite `src/ml-pipeline/deploy_model.sh` (a bash
+- Create or fully overwrite `src/ml-pipeline/deploy_model_endpoint.py`.
+- Create or fully overwrite `src/ml-pipeline/deploy_model_endpoint.sh` (a bash
   wrapper script).
 
 Assumptions:
@@ -21,7 +21,7 @@ Assumptions:
 - `src/deploy/score.py` exists and will be used as the scoring script.
 - `src/deploy/env-infer.yml` defines the inference environment.
 
-Requirements for `deploy_model.py`:
+Requirements for `deploy_model_endpoint.py`:
 
 1. Dependencies:
    - Use `azure.ai.ml` (SDK v2) and `azure.identity`:
@@ -69,10 +69,10 @@ Constraints:
 - Keep the script focused on a single responsibility: deploying the
   model to an online endpoint.
 
-Requirements for `deploy_model.sh`:
+Requirements for `deploy_model_endpoint.sh`:
 
 1. Purpose:
-   - Provide a convenient wrapper around `deploy_model.py`.
+   - Provide a convenient wrapper around `deploy_model_endpoint.py`.
    - Read Azure configuration from the infrastructure deployment outputs.
 
 2. Behavior:
@@ -87,7 +87,7 @@ Requirements for `deploy_model.sh`:
      - `--model-version` (required)
      - `--endpoint-name` (required)
      - `--deployment-name` (optional, defaults to "blue")
-   - Invoke `deploy_model.py` with these values.
+   - Invoke `deploy_model_endpoint.py` with these values.
    - Pass through any additional arguments for instance type/count.
 
 3. UX:
@@ -100,6 +100,6 @@ Important:
 
 - Do NOT print the file contents in chat.
 - Write the complete script directly to
-  `src/ml-pipeline/deploy_model.py`, overwriting any existing content.
+  `src/ml-pipeline/deploy_model_endpoint.py`, overwriting any existing content.
 - Write the complete script directly to
-  `src/ml-pipeline/deploy_model.sh`, overwriting any existing content.
+  `src/ml-pipeline/deploy_model_endpoint.sh`, overwriting any existing content.

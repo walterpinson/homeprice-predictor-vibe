@@ -3,10 +3,10 @@
 # Deploy model to Azure ML managed online endpoint
 #
 # This script reads the infrastructure deployment outputs and invokes
-# deploy_model.py with the appropriate Azure configuration.
+# deploy_model_endpoint.py with the appropriate Azure configuration.
 #
 # Usage:
-#   ./deploy_model.sh \
+#   ./deploy_model_endpoint.sh \
 #     --model-name <name> \
 #     --model-version <version> \
 #     --endpoint-name <endpoint> \
@@ -15,7 +15,7 @@
 #     [--instance-count <count>]
 #
 # Example:
-#   ./deploy_model.sh \
+#   ./deploy_model_endpoint.sh \
 #     --model-name house-pricing-01 \
 #     --model-version 1 \
 #     --endpoint-name house-price-ep
@@ -148,7 +148,7 @@ echo ""
 
 # Invoke the Python script
 cd "$SCRIPT_DIR"
-python3 deploy_model.py \
+python3 deploy_model_endpoint.py \
   --subscription-id "$SUBSCRIPTION_ID" \
   --resource-group "$RESOURCE_GROUP" \
   --workspace-name "$WORKSPACE_NAME" \
