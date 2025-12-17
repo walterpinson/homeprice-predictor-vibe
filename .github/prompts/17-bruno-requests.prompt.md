@@ -10,10 +10,13 @@ endpoint for house price prediction.
 
 Tasks:
 
-- Under `bruno/house-price-api/requests/`, create or overwrite:
+- Under `bruno/house-price-api/`, create or overwrite:
   - `predict-basic.bru`
   - `predict-large-house.bru`
   - `predict-fixer-upper.bru`
+
+Note: Place request files directly in the collection root folder, NOT in
+a `requests/` subfolder.
 
 Requirements for each `.bru` file:
 
@@ -22,10 +25,16 @@ Requirements for each `.bru` file:
   - Use URL based on the selected environment's `baseUrl`, appending
     the scoring path (for example `/score`), as is typical for Azure ML
     managed online endpoints.
+
+- Authentication:
+  - Set `auth: bearer` in the `post` section.
+  - Create a separate `auth:bearer` section with:
+    - `token: {{apiKey}}`
+  - Do NOT use an `Authorization` header in the `headers` section.
+
 - Headers:
   - `Content-Type: application/json`
-  - `Authorization` header that references the environment's `apiKey`
-    (or similar variable), not a hard-coded secret.
+  - No Authorization header (handled via auth:bearer section).
 
 - Body:
   - JSON body with a structure compatible with `score.py`, e.g.:
@@ -56,7 +65,7 @@ Important:
 
 - Do NOT print the `.bru` file contents in chat.
 - Write the request definitions directly into:
-  - `bruno/house-price-api/requests/predict-basic.bru`
-  - `bruno/house-price-api/requests/predict-large-house.bru`
-  - `bruno/house-price-api/requests/predict-fixer-upper.bru`
+  - `bruno/house-price-api/predict-basic.bru`
+  - `bruno/house-price-api/predict-large-house.bru`
+  - `bruno/house-price-api/predict-fixer-upper.bru`
   overwriting any existing content.
