@@ -71,6 +71,16 @@ def parse_args():
         default=1,
         help="Number of instances (default: 1)",
     )
+    parser.add_argument(
+        "--env-version",
+        default=None,
+        help="Environment version (e.g., '1', '2', etc.). If not specified, uses timestamp.",
+    )
+    parser.add_argument(
+        "--force-env-rebuild",
+        action="store_true",
+        help="Force rebuild of the environment even if it already exists",
+    )
     return parser.parse_args()
 
 
@@ -144,10 +154,18 @@ def main():
         sys.exit(1)
     
     # Create environment from YAML
-    print(f"[deploy] Creating inference environment ...")
+    import time
+    env_version = args.env_version if args.env_version else str(int(time.time()))
+    env_name = f"house-price-inference-env"
+    
+    print(f"[deploy] Creating inference environment (version: {env_version}) ...")
+    if args.force_env_rebuild:
+        print(f"[deploy] Force rebuild enabled - will create new environment version")
+    
     try:
         environment = Environment(
-            name="house-price-inference-env",
+            name=env_name,
+            version=env_version,
             description="Inference environment for house price prediction",
             conda_file=str(env_file),
             image="mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04:latest",

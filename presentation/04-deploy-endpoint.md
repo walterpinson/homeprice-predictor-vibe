@@ -76,3 +76,27 @@ cd src/ml-pipeline
   - Change inputs, see predictions in real time.
 
 > From vibe to endpoint: an ML API you can hit from any client.
+
+---
+
+# Troubleshooting: Rebuilding the Environment
+
+- If the deployment fails due to missing packages:
+  - Update `env-infer.yml` with required dependencies.
+  - Force a rebuild with a new environment version.
+- Optional parameters for environment management:
+  - `--env-version <version>`: Specify version number (e.g., "2", "3").
+  - `--force-env-rebuild`: Force creation of new environment.
+
+```bash
+cd src/ml-pipeline
+
+./deploy_model_endpoint.sh \
+  --model-name house-pricing-01 \
+  --model-version 1 \
+  --endpoint-name house-price-ep \
+  --env-version 2 \
+  --force-env-rebuild
+```
+
+> Environment versioning ensures clean rebuilds without orphaned dependencies.

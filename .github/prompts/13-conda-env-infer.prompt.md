@@ -29,10 +29,11 @@ Requirements for `env-infer.yml`:
     - `numpy`
     - `pandas`
     - `scikit-learn`
+    - `joblib`
     - `pip`
     - Under `pip:`:
-      - Any minimal Azure ML logging or utilities needed for
-        managed online endpoints (keep this light).
+      - `azureml-inference-server-http` (required for managed online endpoints)
+      - `inference-schema` (for input/output schema decoration)
 
 Constraints:
 

@@ -12,13 +12,23 @@
 #     --endpoint-name <endpoint> \
 #     [--deployment-name <deployment>] \
 #     [--instance-type <type>] \
-#     [--instance-count <count>]
+#     [--instance-count <count>] \
+#     [--env-version <version>] \
+#     [--force-env-rebuild]
 #
 # Example:
 #   ./deploy_model_endpoint.sh \
 #     --model-name house-pricing-01 \
 #     --model-version 1 \
 #     --endpoint-name house-price-ep
+#
+# Example with environment rebuild:
+#   ./deploy_model_endpoint.sh \
+#     --model-name house-pricing-01 \
+#     --model-version 1 \
+#     --endpoint-name house-price-ep \
+#     --env-version 2 \
+#     --force-env-rebuild
 
 set -euo pipefail
 
@@ -80,14 +90,24 @@ while [[ $# -gt 0 ]]; do
       DEPLOYMENT_NAME="$2"
       shift 2
       ;;
-    --instance-type|--instance-count)
+    --instance-type|--instance-count|--env-version)
       EXTRA_ARGS+=("$1" "$2")
       shift 2
+      ;;
+    --force-env-rebuild)
+      EXTRA_ARGS+=("$1")
+      shift
       ;;
     *)
       echo "Unknown option: $1"
       echo ""
       echo "Usage: $0 --model-name <name> --model-version <version> --endpoint-name <endpoint> [options]"
+      echo "Options:"
+      echo "  --deployment-name <name>     Deployment name (default: blue)"
+      echo "  --instance-type <type>       VM instance type (default: Standard_DS2_v2)"
+      echo "  --instance-count <count>     Number of instances (default: 1)"
+      echo "  --env-version <version>      Environment version (e.g., '1', '2')"
+      echo "  --force-env-rebuild          Force rebuild of environment"
       exit 1
       ;;
   esac
