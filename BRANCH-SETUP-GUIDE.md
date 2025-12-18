@@ -353,10 +353,14 @@ Run prompts to deploy endpoint (if starting fresh), or switch to demo-ready to s
 
 ## Resetting Between Demos
 
+Two reset options are available:
+
+### Quick Reset (Preserves Infrastructure)
+
 After completing a presentation, reset the working directory for next practice run:
 
 ```bash
-# Reset to clean state (removes generated artifacts)
+# Reset to clean state (removes generated artifacts, preserves infrastructure)
 ./reset-demo.sh
 
 # Optionally commit the reset state
@@ -366,6 +370,25 @@ git commit -m "chore: reset to demo-start state"
 # Push if you want to preserve this checkpoint
 git push origin demo-segment-1  # Or whichever segment you're on
 ```
+
+### Complete Reset (New User Setup)
+
+For new users or creating a pristine demo-segment-1 branch:
+
+```bash
+# Complete reset - removes ALL generated files including infrastructure
+./reset.sh
+
+# Create fresh demo-segment-1 branch
+git checkout -b demo-segment-1
+git add -A
+git commit -m "chore(demo): create pristine segment-1 starting point"
+git push origin demo-segment-1
+```
+
+**Key Differences:**
+- `reset-demo.sh`: Preserves infrastructure (Bicep, deploy scripts, env-train.yml)
+- `reset.sh`: Removes everything that can be regenerated from Copilot prompts
 
 ---
 
@@ -389,7 +412,10 @@ git push origin demo-segment-1  # Or whichever segment you're on
 ### After Demo
 
 ```bash
-./reset-demo.sh          # Clean up generated files
+./reset-demo.sh          # Quick reset (preserves infrastructure)
+# OR
+./reset.sh               # Complete reset (removes everything)
+
 git checkout main        # Return to baseline
 ```
 
