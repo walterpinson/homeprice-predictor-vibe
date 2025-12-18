@@ -29,30 +29,57 @@ General behavior:
 
 Files and folders to PRESERVE (do NOT delete):
 
-- All files under:
-  - `.github/`
-  - `src/infrastructure/` (infra is vibed and tested already)
-  - `src/deploy/` (env-train.yml, env-infer.yml, score.py)
-  - `bruno/` (collections and .bru.sample files)
-  - `presentation/`
-- `PROMPTS.md`
-- `README.md`
-- `DEMO-SCRIPTS.md`
-- License and .gitignore
+- Infrastructure code:
+  - `src/infrastructure/**` (Bicep, deploy scripts, verify scripts)
+  - Note: `outputs.json` will be regenerated, so it's safe to remove
+- Deployment runtime (stable scaffolding):
+  - `src/deploy/env-train.yml` (training environment)
+  - `src/deploy/env-infer.yml` (inference environment)
+  - `src/deploy/score.py` (scoring entry script)
+- Data generation infrastructure:
+  - `src/data/generate_data.sh`
+  - `src/data/generate_synthetic_data.py`
+- Bruno API testing:
+  - `bruno/house-price-api/bruno.json`
+  - `bruno/house-price-api/environments/demo.bru.sample`
+  - `bruno/house-price-api/*.bru` (request files)
+  - Note: `demo.bru` contains secrets and should be removed
+- Prompts and documentation:
+  - `.github/prompts/**`
+  - `.github/context/**`
+  - `.github/copilot-instructions.md`
+  - `presentation/**`
+  - `PROMPTS.md` (in presentation folder)
+  - `README.md`
+  - `DEMO-SCRIPTS.md` (in presentation folder)
+  - `LICENSE`
+  - `.gitignore`
 
 Files and artifacts to REMOVE (these will be re-created during the demo):
 
-- Training & data scripts:
+- ML pipeline scripts:
   - `src/ml-pipeline/register_data.py`
+  - `src/ml-pipeline/register_data.sh`
   - `src/ml-pipeline/train.py`
   - `src/ml-pipeline/submit_training_job.py`
   - `src/ml-pipeline/submit_training_job.sh`
-  - `src/ml-pipeline/register.py`
-  - `src/ml-pipeline/deploy_model.py`
-- Any generated synthetic data and MLTable materialization artifacts:
-  - `src/data/raw/*.csv`
-  - `src/data/mltable/**` (MLTable definitions can be regenerated)
-- Any Python cache and temporary files:
+  - `src/ml-pipeline/register_model.py`
+  - `src/ml-pipeline/register_model.sh`
+  - `src/ml-pipeline/deploy_model_endpoint.py`
+  - `src/ml-pipeline/deploy_model_endpoint.sh`
+- Data artifacts:
+  - `src/data/raw/*.csv` (synthetic data)
+  - `src/data/mltable/train/*` (MLTable definitions)
+  - `src/data/mltable/val/*`
+  - `src/data/mltable/test/*`
+  - `src/data/prepare_mltables.sh`
+  - `src/data/README.md` (scenario narrative, regenerated from prompt)
+- Infrastructure outputs:
+  - `src/infrastructure/outputs.json` (regenerated on deploy)
+  - `src/infrastructure/generate_outputs.sh` (if present)
+- Bruno secrets:
+  - `bruno/house-price-api/environments/demo.bru` (contains API keys)
+- Python cache and temporary files:
   - `**/__pycache__/`
   - `**/*.pyc`
 

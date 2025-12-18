@@ -48,6 +48,17 @@ Tasks:
    - No VNets or private endpoints.
    - No advanced diagnostics beyond what's needed.
 
+5. Define outputs section:
+   - Add an `output` section at the end of the template that exports:
+     - `workspaceName` (string): the name of the ML workspace
+     - `storageAccountName` (string): the name of the storage account
+     - `keyVaultName` (string): the name of the key vault
+     - `containerRegistryName` (string): the name of the container registry
+     - `appInsightsName` (string): the name of Application Insights
+     - `computeCluster` (string): the name of the AmlCompute cluster
+   - These outputs will be captured by the deployment script for use by
+     downstream ML pipeline scripts.
+
 Instructions:
 
 - Read the existing `src/infrastructure/main.bicep` in this workspace.

@@ -28,7 +28,24 @@ Goals:
      - Key Vault name.
      - Container registry name.
      - Application Insights name.
+     - Compute cluster name.
    - Assume the Bicep template defines these as outputs.
+   - Capture these outputs to a JSON file at `outputs.json` in the same
+     directory with the following structure:
+     {
+       "subscriptionId": "<subscription-id>",
+       "resourceGroup": "<resource-group>",
+       "location": "<location>",
+       "workspaceName": "<workspace-output>",
+       "storageAccountName": "<storage-output>",
+       "keyVaultName": "<keyvault-output>",
+       "containerRegistryName": "<acr-output>",
+       "appInsightsName": "<appinsights-output>",
+       "computeCluster": "<compute-output>"
+     }
+   - Use `jq` or `az --query` to parse the deployment outputs cleanly.
+   - This file will be used by downstream ML pipeline scripts to avoid
+     requiring the user to pass workspace details repeatedly.
 
 3. Developer experience:
    - Use clear, prefixed log lines like:
