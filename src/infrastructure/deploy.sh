@@ -134,6 +134,7 @@ STORAGE_NAME=$(echo "$OUTPUTS" | jq -r '.storageAccountName.value')
 KEYVAULT_NAME=$(echo "$OUTPUTS" | jq -r '.keyVaultName.value')
 ACR_NAME=$(echo "$OUTPUTS" | jq -r '.containerRegistryName.value')
 APPINSIGHTS_NAME=$(echo "$OUTPUTS" | jq -r '.appInsightsName.value')
+COMPUTE_CLUSTER_NAME=$(echo "$OUTPUTS" | jq -r '.computeClusterName.value')
 
 echo "[deploy] Saving deployment outputs to outputs.json..."
 cat > "$(dirname "$0")/outputs.json" <<EOF
@@ -145,7 +146,8 @@ cat > "$(dirname "$0")/outputs.json" <<EOF
   "storageAccountName": "$STORAGE_NAME",
   "keyVaultName": "$KEYVAULT_NAME",
   "containerRegistryName": "$ACR_NAME",
-  "appInsightsName": "$APPINSIGHTS_NAME"
+  "appInsightsName": "$APPINSIGHTS_NAME",
+  "computeCluster": "$COMPUTE_CLUSTER_NAME"
 }
 EOF
 
@@ -158,6 +160,7 @@ echo "Storage Account:    $STORAGE_NAME"
 echo "Key Vault:          $KEYVAULT_NAME"
 echo "Container Registry: $ACR_NAME"
 echo "App Insights:       $APPINSIGHTS_NAME"
+echo "Compute Cluster:    $COMPUTE_CLUSTER_NAME"
 echo "========================================="
 echo ""
 echo "[deploy] Deployment complete!"
