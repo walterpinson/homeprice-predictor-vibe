@@ -22,109 +22,122 @@ main                     # Stable baseline
   ├─ demo-ready          # Complete working demo with deployed endpoint
   │                      # Used for opening inference demo
   │
-  └─ demo-infra-YYYY-MM-DD   # Points to specific clean infrastructure
-       │                      # Example: demo-infra-2025-01-15
+  └─ demo-segment-1      # Pre-infrastructure (clean slate)
+       │                 # - reset-demo.sh has been run
+       │                 # - infrastructure scripts ready but not executed
+       │                 # - no outputs.json
+       │                 # - no Azure resource group or infrastructure
        │
-       ├─ demo-segment-1      # Post-infrastructure (outputs.json created)
+       ├─ demo-segment-2      # Post-infrastructure (outputs.json created)
+       │                      # Azure RG: rg-mlvibes-02
        │
-       ├─ demo-segment-2      # Post-data generation (CSVs, MLTables exist)
+       ├─ demo-segment-3      # Post-data generation (CSVs, MLTables exist)
+       │                      # Azure RG: rg-mlvibes-03
        │
-       ├─ demo-segment-3      # Post-training (model registered)
-       │
-       └─ demo-segment-4      # Post-deployment (endpoint created, not tested)
+       └─ demo-segment-4      # Post-training (mltables and models registered)
+                              # Azure RG: rg-mlvibes-04
 ```
+
+**Note:** Each segment branch (except demo-segment-1) is associated with a dedicated Azure resource group that reflects the infrastructure state for that segment's starting point.
 
 ---
 
-## One-Time Setup: Create Clean Infrastructure
+## One-Time Setup: Create Demo-Segment-1 Branch
 
-Before each presentation, deploy fresh Azure ML infrastructure to a dedicated resource group:
+Before creating segment checkpoints, establish the clean starting point with infrastructure scripts ready but not executed:
 
-### 1. Create Resource Group
-
-```bash
-# Use date-based naming for traceability
-DATE=$(date +%Y-%m-%d)
-RG_NAME="rg-ml-demo-${DATE}"
-LOCATION="eastus"
-BASE_NAME="demo${DATE//-/}"  # Removes hyphens for Azure naming
-
-az group create \
-  --name "$RG_NAME" \
-  --location "$LOCATION"
-```
-
-### 2. Deploy Infrastructure
+### 1. Reset to Clean State
 
 ```bash
-cd src/infrastructure
+# Ensure you're on main or a clean branch
+git checkout main
 
-./deploy.sh \
-  --subscription-id "$AZURE_SUBSCRIPTION_ID" \
-  --resource-group "$RG_NAME" \
-  --location "$LOCATION" \
-  --base-name "$BASE_NAME"
-
-cd ../..
+# Run reset script to remove generated artifacts
+./reset-demo.sh
 ```
 
-**Expected output:** `outputs.json` with workspace details
-
-### 3. Verify Infrastructure
+### 2. Create Demo-Segment-1 Branch
 
 ```bash
-cd src/infrastructure
-
-./verify.sh \
-  --subscription-id "$AZURE_SUBSCRIPTION_ID" \
-  --resource-group "$RG_NAME" \
-  --workspace-name "${BASE_NAME}-mlw" \
-  --compute-name "cpu-cluster"
-
-cd ../..
+# Create the pre-infrastructure checkpoint
+git checkout -b demo-segment-1
+git add -A
+git commit -m "chore(demo): create segment-1 starting point (pre-infrastructure)"
+git push origin demo-segment-1
 ```
 
-### 4. Create Infrastructure Branch
-
-```bash
-# Create branch pointing to this infrastructure
-git checkout -b "demo-infra-${DATE}"
-git add src/infrastructure/outputs.json
-git commit -m "chore(infra): add outputs for $RG_NAME infrastructure"
-git push origin "demo-infra-${DATE}"
-```
+**State:**
+- ✅ Infrastructure scripts in place (`src/infrastructure/*.bicep`, `deploy.sh`, `verify.sh`)
+- ✅ Clean workspace (no generated artifacts)
+- ❌ No `outputs.json` file
+- ❌ No Azure resource group
+- ❌ No Azure infrastructure deployed
 
 ---
 
 ## Creating Segment Checkpoints
 
-Use the infrastructure branch as your starting point:
+Use demo-segment-1 as your starting point:
 
-### Segment 1: Post-Infrastructure
+### Segment 2: Post-Infrastructure
 
 ```bash
-# Start from clean infrastructure
-git checkout "demo-infra-${DATE}"
-git checkout -b demo-segment-1
+# Start from clean slate
+git checkout demo-segment-1
+git checkout -b demo-segment-2
 
-# No changes needed - outputs.json already exists
-git push origin demo-segment-1
+# Deploy Azure ML infrastructure
+RG_NAME="rg-mlvibes-02"
+LOCATION="eastus"
+BASE_NAME="mlvibes02"
+
+# Create resource group
+az group create --name "$RG_NAME" --location "$LOCATION"
+
+# Deploy infrastructure
+cd src/infrastructure
+./deploy.sh \
+  --subscription-id "$AZURE_SUBSCRIPTION_ID" \
+  --resource-group "$RG_NAME" \
+  --location "$LOCATION" \
+  --base-name "$BASE_NAME"
+cd ../..
+
+# Commit the outputs.json
+git add src/infrastructure/outputs.json
+git commit -m "chore(infra): add outputs for rg-mlvibes-02 infrastructure"
+git push origin demo-segment-2
 ```
 
 **State:**
-- ✅ Infrastructure deployed
+- ✅ Infrastructure deployed to Azure (resource group: `rg-mlvibes-02`)
 - ✅ `outputs.json` exists
 - ❌ No data artifacts
 - ❌ No ML pipeline scripts
 
 ---
 
-### Segment 2: Post-Data Generation
+### Segment 3: Post-Data Generation
 
 ```bash
-# Start from segment 1
-git checkout demo-segment-1
-git checkout -b demo-segment-2
+# Start from segment 2
+git checkout demo-segment-2
+git checkout -b demo-segment-3
+
+# Optional: Deploy to dedicated resource group for this segment
+# This allows segment 3 to have independent infrastructure
+RG_NAME="rg-mlvibes-03"
+LOCATION="eastus"
+BASE_NAME="mlvibes03"
+
+az group create --name "$RG_NAME" --location "$LOCATION"
+cd src/infrastructure
+./deploy.sh \
+  --subscription-id "$AZURE_SUBSCRIPTION_ID" \
+  --resource-group "$RG_NAME" \
+  --location "$LOCATION" \
+  --base-name "$BASE_NAME"
+cd ../..
 
 # Generate data using prompts
 # In VS Code Copilot Chat:
@@ -139,25 +152,44 @@ cd ../..
 #   #mltable-definitions
 
 # Commit the generated artifacts
-git add src/data/
-git commit -m "chore(data): add generated data for segment 2 checkpoint"
-git push origin demo-segment-2
+git add src/data/ src/infrastructure/outputs.json
+git commit -m "chore(data): add generated data for segment 3 checkpoint"
+git push origin demo-segment-3
 ```
 
 **State:**
-- ✅ Infrastructure deployed
+- ✅ Infrastructure deployed (resource group: `rg-mlvibes-03`)
 - ✅ Data generated (CSVs, MLTables)
 - ❌ No training jobs
 - ❌ No models registered
 
 ---
 
-### Segment 3: Post-Training
+### Segment 4: Post-Training
 
 ```bash
-# Start from segment 2
-git checkout demo-segment-2
-git checkout -b demo-segment-3
+# Start from segment 3
+git checkout demo-segment-3
+git checkout -b demo-segment-4
+
+# Optional: Deploy to dedicated resource group for this segment
+RG_NAME="rg-mlvibes-04"
+LOCATION="eastus"
+BASE_NAME="mlvibes04"
+
+az group create --name "$RG_NAME" --location "$LOCATION"
+cd src/infrastructure
+./deploy.sh \
+  --subscription-id "$AZURE_SUBSCRIPTION_ID" \
+  --resource-group "$RG_NAME" \
+  --location "$LOCATION" \
+  --base-name "$BASE_NAME"
+cd ../..
+
+# Re-register data assets in new workspace
+cd src/ml-pipeline
+./register_data.sh --base-data-name "house-prices"
+cd ../..
 
 # Generate ML pipeline scripts using prompts
 # In VS Code Copilot Chat:
@@ -184,25 +216,29 @@ cd src/ml-pipeline
 cd ../..
 
 # Commit the generated scripts
-git add src/ml-pipeline/
-git commit -m "chore(training): add training scripts and registered model for segment 3"
-git push origin demo-segment-3
+git add src/ml-pipeline/ src/infrastructure/outputs.json
+git commit -m "chore(training): add training scripts and registered model for segment 4"
+git push origin demo-segment-4
 ```
 
 **State:**
-- ✅ Infrastructure deployed
+- ✅ Infrastructure deployed (resource group: `rg-mlvibes-04`)
 - ✅ Data generated
 - ✅ Model trained and registered
+- ✅ MLTables and models registered in Azure ML
 - ❌ No endpoint deployed
 
 ---
 
-### Segment 4: Post-Deployment
+## Creating Demo-Ready Branch
+
+This branch has a fully working endpoint for the opening demo
+
+:
 
 ```bash
-# Start from segment 3
-git checkout demo-segment-3
-git checkout -b demo-segment-4
+# Start from segment 4
+git checkout demo-segment-4
 
 # Generate deployment scripts using prompts
 # In VS Code Copilot Chat:
@@ -216,30 +252,11 @@ cd src/ml-pipeline
   --model-name "house-pricing-01" \
   --model-version 1 \
   --endpoint-name "house-pricing-ep-01"
-
 cd ../..
 
 # Commit the deployment artifacts
 git add src/deploy/ src/ml-pipeline/deploy_model_endpoint.*
-git commit -m "chore(deploy): add deployment scripts and endpoint for segment 4"
-git push origin demo-segment-4
-```
-
-**State:**
-- ✅ Infrastructure deployed
-- ✅ Data generated
-- ✅ Model trained and registered
-- ✅ Endpoint deployed (may still be warming up)
-
----
-
-## Creating Demo-Ready Branch
-
-This branch has a fully working endpoint for the opening demo:
-
-```bash
-# Use segment-4 as base
-git checkout demo-segment-4
+git commit -m "chore(deploy): add deployment scripts and endpoint for demo-ready"
 
 # Wait for endpoint to be fully ready
 # Test with Bruno to confirm it works
@@ -281,56 +298,56 @@ Open Bruno, run requests against deployed endpoint.
 
 ---
 
-### Segment 1: Infrastructure Overview
+### Segment 1: Infrastructure Deployment
 
 ```bash
-# Stay on demo-ready or switch to demo-segment-1
-git checkout demo-segment-1  # If you want clean slate
+# Start from pre-infrastructure checkpoint
+git checkout demo-segment-1
 ```
 
-Show Bicep files, explain deployment, show workspace in portal.
+Show Bicep files, explain infrastructure, then deploy live or switch to demo-segment-2 to show deployed infrastructure.
 
 ---
 
 ### Segment 2: Live Data Generation
 
 ```bash
-# Option A: Continue from segment 1
-# (if you ran prompts and generated data)
+# Option A: Continue from segment 1 if infrastructure deployed
+# (or if you deployed during segment 1)
 
-# Option B: Switch to checkpoint
+# Option B: Switch to checkpoint with infrastructure ready
 git checkout demo-segment-2
 ```
 
-Run prompts #06, #07, #08 to generate data (if starting fresh).
+Run prompts to generate data (if starting fresh), or switch to demo-segment-3 to show generated data.
 
 ---
 
 ### Segment 3: Live Training
 
 ```bash
-# Option A: Continue from segment 2
-# (if you successfully generated data)
+# Option A: Continue from segment 2 if data generated
+# (or if you generated data during segment 2)
 
-# Option B: Switch to checkpoint
+# Option B: Switch to checkpoint with data ready
 git checkout demo-segment-3
 ```
 
-Run prompts #09-#12 to train and register model (if starting fresh).
+Run prompts to train and register model (if starting fresh), or switch to demo-segment-4 to show registered model.
 
 ---
 
 ### Segment 4: Live Deployment
 
 ```bash
-# Option A: Continue from segment 3
-# (if you successfully trained model)
+# Option A: Continue from segment 3 if model trained
+# (or if you trained model during segment 3)
 
-# Option B: Switch to checkpoint
+# Option B: Switch to checkpoint with trained model
 git checkout demo-segment-4
 ```
 
-Run prompts #13-#15 to deploy endpoint (if starting fresh).
+Run prompts to deploy endpoint (if starting fresh), or switch to demo-ready to show working endpoint.
 
 ---
 
@@ -356,18 +373,18 @@ git push origin demo-segment-1  # Or whichever segment you're on
 
 ### Before Demo Day
 
-1. Deploy clean infrastructure → `demo-infra-YYYY-MM-DD`
-2. Create segment checkpoints → `demo-segment-1` through `demo-segment-4`
-3. Test opening demo → `demo-ready` with working endpoint
+1. Create clean starting point → `demo-segment-1` (pre-infrastructure)
+2. Create segment checkpoints → `demo-segment-2` (post-infra), `demo-segment-3` (post-data), `demo-segment-4` (post-training)
+3. Create and test opening demo → `demo-ready` with working endpoint
 4. Practice transitions between segments
 
 ### During Demo
 
 - **Opening:** `demo-ready` (show working endpoint)
-- **Segment 1:** `demo-segment-1` (show infra code)
-- **Segment 2:** Continue or switch to `demo-segment-2`
-- **Segment 3:** Continue or switch to `demo-segment-3`
-- **Segment 4:** Continue or switch to `demo-segment-4`
+- **Segment 1:** `demo-segment-1` (deploy infrastructure) → can switch to `demo-segment-2` if needed
+- **Segment 2:** `demo-segment-2` (generate data) → can switch to `demo-segment-3` if needed
+- **Segment 3:** `demo-segment-3` (train model) → can switch to `demo-segment-4` if needed
+- **Segment 4:** `demo-segment-4` (deploy endpoint) → can switch to `demo-ready` if needed
 
 ### After Demo
 
@@ -384,14 +401,17 @@ After demos, clean up Azure resources:
 
 ```bash
 # List all demo resource groups
-az group list --query "[?starts_with(name, 'rg-ml-demo-')].name" -o table
+az group list --query "[?starts_with(name, 'rg-mlvibes-')].name" -o table
 
-# Delete specific demo infrastructure
-az group delete --name "rg-ml-demo-2025-01-15" --yes --no-wait
+# Delete segment-specific infrastructure
+az group delete --name "rg-mlvibes-02" --yes --no-wait
+az group delete --name "rg-mlvibes-03" --yes --no-wait
+az group delete --name "rg-mlvibes-04" --yes --no-wait
 
-# Delete corresponding git branch (optional)
-git branch -d demo-infra-2025-01-15
-git push origin --delete demo-infra-2025-01-15
+# Or delete all at once
+for rg in rg-mlvibes-02 rg-mlvibes-03 rg-mlvibes-04; do
+  az group delete --name "$rg" --yes --no-wait
+done
 ```
 
 ---
@@ -400,11 +420,13 @@ git push origin --delete demo-infra-2025-01-15
 
 1. **Test segment transitions** before live demos
 2. **Keep Bruno environment file** (demo.bru) out of version control (contains secrets)
-3. **Use date-based naming** for infrastructure to avoid conflicts
+3. **Use consistent resource group naming** (`rg-mlvibes-02`, `rg-mlvibes-03`, `rg-mlvibes-04`) for each segment
 4. **Practice checkpoint switches** to build muscle memory
 5. **Have demo-ready loaded in Bruno** before presentation starts
 6. **Know which branch has which state** - print this guide as reference
 7. **Pre-warm endpoints** before demos (they can take 5-10 minutes to deploy)
+8. **Deploy infrastructure in background** while using demo-ready for opening - switch to demo-segment-2 when ready
+9. **Each segment can have independent infrastructure** - useful for parallel development or recovery scenarios
 
 ---
 
@@ -426,8 +448,13 @@ git stash pop
 **Problem:** outputs.json points to wrong resource group
 
 ```bash
+# Check which resource group each segment should use:
+# - demo-segment-2 → rg-mlvibes-02
+# - demo-segment-3 → rg-mlvibes-03
+# - demo-segment-4 → rg-mlvibes-04
+
 # Manually edit outputs.json to point to correct infrastructure
-# Or re-run deploy.sh to regenerate it
+# Or re-run deploy.sh to regenerate it with the correct resource group
 ```
 
 **Problem:** Endpoint deployment takes too long during demo
