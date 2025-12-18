@@ -69,9 +69,10 @@ Command: `#scenario-house-prices`
 
 ### 07 – Synthetic Data CSV
 
-Use this to generate synthetic train/val/test datasets. Creates three
-CSV files under `src/data/raw/` with realistic, correlated house price
-data (~500 total rows).
+Use this to generate synthetic train/val/test datasets. Creates a
+Python script and bash wrapper that generate three CSV files under
+`src/data/raw/` with realistic, correlated house price data (~500
+total rows).
 
 Prompt file: `.github/prompts/07-synthetic-data-csv.prompt.md`
 
@@ -81,7 +82,10 @@ Command: `#synthetic-data-csv`
 
 Use this to create MLTable definitions for Azure ML data asset
 registration. Creates three `MLTable` files under `src/data/mltable/`
-that reference the raw CSV files.
+and a bash preparation script `src/data/prepare_mltables.sh`.
+
+**Note:** The preparation script is optional since `register_data.sh`
+automatically prepares MLTable directories before registration.
 
 Prompt file: `.github/prompts/08-mltable-definitions.prompt.md`
 

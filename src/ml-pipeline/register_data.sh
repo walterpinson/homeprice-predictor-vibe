@@ -74,6 +74,36 @@ echo "  Resource Group:   $RESOURCE_GROUP"
 echo "  Workspace Name:   $WORKSPACE_NAME"
 echo ""
 
+# Prepare MLTable directories (copy CSV files if needed)
+echo "[register] Preparing MLTable directories..."
+DATA_DIR="$REPO_ROOT/src/data"
+RAW_DIR="$DATA_DIR/raw"
+MLTABLE_DIR="$DATA_DIR/mltable"
+
+for split in train val test; do
+  src="$RAW_DIR/${split}.csv"
+  dest="$MLTABLE_DIR/${split}/${split}.csv"
+  
+  if [[ ! -f "$src" ]]; then
+    echo "  [ERROR] Source CSV not found: $src"
+    echo "  Please generate synthetic data first:"
+    echo "    cd src/data && ./generate_data.sh"
+    exit 1
+  fi
+  
+  # Copy if destination doesn't exist or source is newer
+  if [[ ! -f "$dest" ]] || [[ "$src" -nt "$dest" ]]; then
+    echo "  [copy] ${split}.csv -> mltable/${split}/"
+    mkdir -p "$(dirname "$dest")"
+    cp "$src" "$dest"
+  else
+    echo "  [skip] ${split}.csv already up-to-date in mltable/${split}/"
+  fi
+done
+
+echo "[register] ✓ MLTable directories prepared."
+echo ""
+
 # Invoke the Python script
 cd "$SCRIPT_DIR"
 python3 register_data.py \

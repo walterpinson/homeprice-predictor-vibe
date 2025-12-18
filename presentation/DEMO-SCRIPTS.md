@@ -101,6 +101,20 @@ In **Copilot Chat**:
 
 This creates:
 
+- `src/data/generate_synthetic_data.py`
+- `src/data/generate_data.sh`
+
+In **Terminal**:
+
+```bash
+cd src/data
+chmod +x generate_data.sh
+./generate_data.sh
+cd ../..
+```
+
+This generates:
+
 - `src/data/raw/train.csv`
 - `src/data/raw/val.csv`
 - `src/data/raw/test.csv`
@@ -123,6 +137,11 @@ This creates:
 - `src/data/mltable/train/MLTable`
 - `src/data/mltable/val/MLTable`
 - `src/data/mltable/test/MLTable`
+- `src/data/prepare_mltables.sh` (optional standalone utility)
+
+**Note:** The MLTable directories will be automatically prepared when you
+run `register_data.sh` in the next segment, so no manual preparation
+step is needed.
 
 ---
 
