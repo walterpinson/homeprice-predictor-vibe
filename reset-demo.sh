@@ -55,10 +55,13 @@ remove_item() {
     echo "[dry-run] Would remove: $item"
   else
     echo "[reset] Removing: $item"
-    rm -rf "$item"
+    rm -rf "$item" || {
+      echo "[reset] Warning: Failed to remove $item"
+      return
+    }
   fi
   
-  ((REMOVED_COUNT++))
+  REMOVED_COUNT=$((REMOVED_COUNT + 1))
 }
 
 # Remove ML pipeline scripts
@@ -78,6 +81,8 @@ echo ""
 echo "[reset] Cleaning data artifacts..."
 remove_item "src/data/README.md"
 remove_item "src/data/prepare_mltables.sh"
+remove_item "src/data/generate_synthetic_data.py"
+remove_item "src/data/generate_data.sh"
 
 # Remove raw CSV files
 if [[ -d "src/data/raw" ]]; then
@@ -98,6 +103,12 @@ echo ""
 echo "[reset] Cleaning infrastructure outputs..."
 remove_item "src/infrastructure/outputs.json"
 remove_item "src/infrastructure/generate_outputs.sh"
+echo ""
+
+# Remove deployment artifacts
+echo "[reset] Cleaning deployment artifacts..."
+remove_item "src/deploy/score.py"
+remove_item "src/deploy/env-infer.yml"
 echo ""
 
 # Remove Bruno secrets
@@ -131,8 +142,7 @@ echo "  presentation/DEMO-SCRIPTS.md"
 echo ""
 echo "Preserved items:"
 echo "  ✓ Infrastructure code (src/infrastructure/)"
-echo "  ✓ Deployment scaffolding (src/deploy/)"
-echo "  ✓ Data generation infrastructure (src/data/generate_*.{py,sh})"
+echo "  ✓ Training environment (src/deploy/env-train.yml)"
 echo "  ✓ Bruno collection structure (bruno/)"
 echo "  ✓ All prompts and documentation (.github/, presentation/)"
 echo ""

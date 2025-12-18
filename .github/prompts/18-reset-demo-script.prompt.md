@@ -32,13 +32,8 @@ Files and folders to PRESERVE (do NOT delete):
 - Infrastructure code:
   - `src/infrastructure/**` (Bicep, deploy scripts, verify scripts)
   - Note: `outputs.json` will be regenerated, so it's safe to remove
-- Deployment runtime (stable scaffolding):
+- Training environment:
   - `src/deploy/env-train.yml` (training environment)
-  - `src/deploy/env-infer.yml` (inference environment)
-  - `src/deploy/score.py` (scoring entry script)
-- Data generation infrastructure:
-  - `src/data/generate_data.sh`
-  - `src/data/generate_synthetic_data.py`
 - Bruno API testing:
   - `bruno/house-price-api/bruno.json`
   - `bruno/house-price-api/environments/demo.bru.sample`
@@ -57,6 +52,9 @@ Files and folders to PRESERVE (do NOT delete):
 
 Files and artifacts to REMOVE (these will be re-created during the demo):
 
+- Data generation scripts:
+  - `src/data/generate_synthetic_data.py`
+  - `src/data/generate_data.sh`
 - ML pipeline scripts:
   - `src/ml-pipeline/register_data.py`
   - `src/ml-pipeline/register_data.sh`
@@ -67,6 +65,9 @@ Files and artifacts to REMOVE (these will be re-created during the demo):
   - `src/ml-pipeline/register_model.sh`
   - `src/ml-pipeline/deploy_model_endpoint.py`
   - `src/ml-pipeline/deploy_model_endpoint.sh`
+- Deployment artifacts:
+  - `src/deploy/score.py`
+  - `src/deploy/env-infer.yml`
 - Data artifacts:
   - `src/data/raw/*.csv` (synthetic data)
   - `src/data/mltable/train/*` (MLTable definitions)
