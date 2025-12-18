@@ -1,0 +1,36 @@
+meta {
+  name: Predict Basic
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/score
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: {{apiKey}}
+}
+
+body:json {
+  {
+    "data": [
+      {
+        "sqft": 1800,
+        "bedrooms": 3,
+        "bathrooms": 2.0,
+        "year_built": 1998,
+        "neighborhood_code": "N3",
+        "garage_spaces": 2,
+        "condition_score": 7,
+        "exterior_type": "siding"
+      }
+    ]
+  }
+}

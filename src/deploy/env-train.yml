@@ -1,0 +1,16 @@
+name: vibe-ml-train
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - numpy
+  - pandas
+  - scikit-learn
+  - joblib
+  - pip
+  - pip:
+      - azure-ai-ml
+      - azure-identity
+      - mltable
+      - mlflow

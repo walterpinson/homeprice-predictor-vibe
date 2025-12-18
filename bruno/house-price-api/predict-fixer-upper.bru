@@ -1,0 +1,36 @@
+meta {
+  name: Predict Fixer Upper
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/score
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: {{apiKey}}
+}
+
+body:json {
+  {
+    "data": [
+      {
+        "sqft": 1200,
+        "bedrooms": 2,
+        "bathrooms": 1.0,
+        "year_built": 1975,
+        "neighborhood_code": "N1",
+        "garage_spaces": 1,
+        "condition_score": 4,
+        "exterior_type": "wood"
+      }
+    ]
+  }
+}
