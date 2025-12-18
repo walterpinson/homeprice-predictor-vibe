@@ -30,6 +30,10 @@ Follow the complete step-by-step demo in:
 
 ### Resetting the Demo
 
+Two reset scripts are available depending on your needs:
+
+#### Quick Reset (reset-demo.sh) - Preserves Infrastructure
+
 To reset the repository from a "demo-ready" state back to "demo-start" state:
 
 ```bash
@@ -42,19 +46,40 @@ To reset the repository from a "demo-ready" state back to "demo-start" state:
 
 **What gets removed:**
 - ML pipeline scripts (register_data, train, submit_training_job, register_model, deploy_model_endpoint)
-- Generated data artifacts (CSV files, MLTable definitions)
+- Generated data artifacts (CSV files, MLTable definitions, data generation scripts)
 - Infrastructure outputs (outputs.json)
+- Deployment artifacts (score.py, env-infer.yml)
 - Bruno secrets (demo.bru with API keys)
 - Python cache files
 
 **What gets preserved:**
-- Infrastructure code (Bicep templates, deploy scripts)
-- Deployment scaffolding (env-train.yml, env-infer.yml, score.py)
-- Data generation scripts (generate_data.sh, generate_synthetic_data.py)
+- Infrastructure code (Bicep templates, deploy.sh, verify.sh)
+- Training environment (env-train.yml)
 - Bruno collection structure
-- All prompts and documentation
+- All .github/ artifacts (prompts, context, instructions)
+- All documentation
 
-After resetting, follow [presentation/DEMO-SCRIPTS.md](presentation/DEMO-SCRIPTS.md) to rebuild the demo.
+#### Complete Reset (reset.sh) - Remove Everything
+
+For new users starting from scratch:
+
+```bash
+# Complete reset - removes ALL generated files
+./reset.sh
+```
+
+**What gets removed:**
+- Everything from reset-demo.sh above, PLUS:
+- Infrastructure scripts (main.bicep, deploy.sh, verify.sh)
+- Training environment (env-train.yml)
+- Entire Bruno collection (bruno/house-price-api/)
+
+**What gets preserved:**
+- All .github/ artifacts (prompts, context, instructions, copilot-instructions.md)
+- Documentation (presentation/, README.md, BRANCH-SETUP-GUIDE.md)
+- Empty directory structure
+
+After resetting, follow [presentation/DEMO-SCRIPTS.md](presentation/DEMO-SCRIPTS.md) to rebuild the demo using Copilot prompts.
 
 ## Repository Structure
 
