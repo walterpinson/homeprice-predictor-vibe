@@ -29,9 +29,22 @@ The script should:
 
 Create a bash script at `src/data/generate_data.sh` that:
 
+- Uses `#!/usr/bin/env bash` shebang
+- Sets `set -euo pipefail` for safety
 - Runs the Python script with appropriate defaults
-- Includes error handling
+- Includes error handling and clear log messages
 - Makes it easy to regenerate data during the demo
+- Example usage:
+  ```bash
+  #!/usr/bin/env bash
+  set -euo pipefail
+  
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  
+  echo "[data] Generating synthetic house price data..."
+  python3 "$SCRIPT_DIR/generate_synthetic_data.py"
+  echo "[data] Data generation complete."
+  ```
 
 Data shape and columns:
 
